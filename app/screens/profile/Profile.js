@@ -11,7 +11,7 @@ import {
   ScrollView,
   FlatList
 } from 'react-native'
-import { PADDING, COLOR, FONT, FONT_SIZE, Vh, Vw } from '../styles/utilities'
+import { PADDING, COLOR, FONT, FONT_SIZE, Vh, Vw } from '../../styles/utilities'
 import { StackNavigator } from 'react-navigation';
 import Modal from './Modal'
 
@@ -19,15 +19,18 @@ const HEADER_MAX_HEIGHT = 35 * Vh;
 const HEADER_MIN_HEIGHT = 14 * Vh;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-class ProfileScreen extends React.Component {
+class ProfileScreen extends Component {
   constructor() {
     super();
     this.animation = new Animated.Value(0)
+    this.modal = new Animated.Value(0)
     this.state = {
       user: {
         plate: 'DJ148WR',
         name: 'Simone Matrone',
-        mail: 'simone@loud.com'
+        mail: 'simone@loud.com',
+        model: 'Fiat Pandino',
+        phoneNumber: '+39 3391159385'
       },
       chat: [
         {
@@ -82,6 +85,20 @@ class ProfileScreen extends React.Component {
     }
   }
 
+  openModal = (val) => {
+    Animated.timing(
+      this.modal,{
+        delay: 0,
+        toValue: val,
+        duration: 600,
+        easing: Easing.bezier(.65,0,.7,1)
+      }
+    ).start();
+  }
+  editUser = (data) => {
+    console.log(data)
+    this.setState({user:data})
+  }
   render() {
     const headerHeight = this.animation.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -98,11 +115,21 @@ class ProfileScreen extends React.Component {
       outputRange: [1,0.85],
       extrapolate: 'clamp',
     });
+    const translateModal = this.modal.interpolate({
+      inputRange: [0, 1],
+      outputRange: [100*Vh,0],
+      extrapolate: 'clamp',
+      })
     const styleHeader = {
       opacity: opacity,
       transform: [
         {scale: scale}
       ]
+    }
+    const modal = {
+      transform: [{
+          translateY: translateModal
+        }]
     }
     return(
       <View style={styles.container}>
@@ -111,16 +138,11 @@ class ProfileScreen extends React.Component {
             <View style={styles.profileTitleContainer}>
               <Text style={styles.profileTitle}>Profilo & Messaggi</Text>
               <TouchableOpacity
-                style={styles.returnReportBtn}
-                onPress={() => {
-                  navigator.showModal({
-                    screen: 'example.SecondScreen',
-                    title: 'Second screen',
-                  })
-                }}>
+                style={styles.profileEditBtn}
+                onPress={()=>this.openModal(1)}>
                 <Image
                   style={styles.settingsIcon}
-                  source={require('../../assets/images/vocal.png')}
+                  source={require('../../../assets/images/vocal.png')}
                 />
               </TouchableOpacity>
             </View>
@@ -156,7 +178,7 @@ class ProfileScreen extends React.Component {
                   style={styles.returnReportBtn}>
                   <Image
                     style={styles.settingsIcon}
-                    source={require('../../assets/images/vocal.png')}
+                    source={require('../../../assets/images/vocal.png')}
                   />
                 </TouchableOpacity>
               </View>
@@ -165,9 +187,10 @@ class ProfileScreen extends React.Component {
         </View>
         </ScrollView>
         <Modal
-          plate={this.state.user.plate}
-          name={this.state.user.name}
-          mail={this.state.user.mail}
+          style={modal}
+          user={this.state.user}
+          closeModal={()=>this.openModal(0)}
+          editUser={this.editUser}
         />
       </View>
     )
@@ -191,6 +214,9 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.DEFAULT,
     color: COLOR.GREY_DARKER,
     fontFamily: FONT.AVENIR
+  },
+  profileEditBtn:{
+    marginLeft: 'auto',
   },
   settingsIcon: {
     marginLeft: 'auto',

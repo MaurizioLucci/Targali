@@ -12,7 +12,7 @@ import { createBottomTabNavigator } from 'react-navigation';
 
 import HomeScreen from './screens/Home';
 import AssistanceScreen from './screens/Assistance';
-import ProfileScreen from './screens/Profile';
+import ProfileScreen from './screens/profile/Profile';
 
 type Props = {};
 export default class App extends Component<Props> {

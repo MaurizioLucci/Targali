@@ -11,6 +11,7 @@
     "react-native": "0.56.0",
     "react-native-blur": "^3.2.2",
     "react-native-i18n": "^2.0.14",
+    "react-native-keyboard-aware-scroll-view": "^0.6.0",
     "react-native-maps": "^0.21.0",
     "react-native-voice": "^0.2.6",
     "react-navigation": "^2.8.0"
