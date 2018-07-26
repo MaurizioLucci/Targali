@@ -200,7 +200,8 @@ class ProfileScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    backgroundColor: COLOR.WHITE
   },
   profileContainer:{
     paddingVertical: 4*Vh,

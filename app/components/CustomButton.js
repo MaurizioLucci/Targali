@@ -25,7 +25,9 @@ const styles = StyleSheet.create({
   containerBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 4
+    borderRadius: 4,
+    height: 8*Vh,
+    width: 85*Vw
   },
   textBtn:{
     fontSize: FONT_SIZE.DEFAULT,

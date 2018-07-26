@@ -310,8 +310,6 @@ const styles = StyleSheet.create({
   },
   sendReportBtn: {
     backgroundColor: COLOR.WHITE,
-    width: 85*Vw,
-    height: 8*Vh
   },
   sendReportBtnText:{
     color: COLOR.GREEN
