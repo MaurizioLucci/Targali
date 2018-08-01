@@ -12,6 +12,7 @@ import { PADDING, COLOR, FONT, FONT_SIZE, Vh, Vw } from '../../styles/utilities'
 import SplashScreen from '../../screens/auth/Splash';
 import SignUpScreen from '../../screens/auth/Signup';
 import LogInScreen from '../../screens/auth/Login';
+import HeaderSlider from '../../components/headerSlider';
 
 const styles = StyleSheet.create({
   header:{
@@ -19,9 +20,6 @@ const styles = StyleSheet.create({
     height: 11*Vh,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  colorRed:{
-    backgroundColor: COLOR.RED
   },
   colorBlue:{
     backgroundColor: COLOR.BLUE
@@ -37,11 +35,6 @@ const styles = StyleSheet.create({
     fontFamily: FONT.AVENIR,
     color: COLOR.WHITE
   },
-  textSplash:{
-    fontFamily: FONT.AVENIR,
-    color: COLOR.WHITE,
-    fontSize: FONT_SIZE.DEFAULT
-  },
   textBack:{
     fontFamily: FONT.BEBAS,
     color: COLOR.WHITE,
@@ -54,7 +47,7 @@ const navigation = createStackNavigator(
     Splash: {
       screen: SplashScreen,
       navigationOptions: {
-        header: <View style={[styles.header, styles.colorRed]}><Text style={styles.textSplash}>La prima app di messaggistica tra auto</Text></View>
+        header: <HeaderSlider/>
       }
     },
     SignUp: {

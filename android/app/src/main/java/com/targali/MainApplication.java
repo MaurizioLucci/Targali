@@ -3,6 +3,9 @@ package com.targali;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.wenkesj.voice.VoicePackage;
 import com.cmcewen.blurview.BlurViewPackage;
@@ -27,6 +30,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFSPackage(),
+            new ImageResizerPackage(),
+            new ImagePickerPackage(),
             new RNI18nPackage(),
             new VoicePackage(),
             new BlurViewPackage(),

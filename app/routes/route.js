@@ -12,8 +12,11 @@ import { Vh, Vw } from '../styles/utilities'
 import HomeScreen from '../screens/Home'
 import AssistanceScreen from '../screens/Assistance'
 import ProfileScreen from '../screens/profile/Profile'
+import ReportScreen from '../screens/report/AddReport'
+import ChatScreen from '../screens/profile/Chat'
 import SplashScreen from '../screens/auth/Splash'
 import AuthStack from './auth/auth'
+import { COLOR } from '../styles/utilities'
 // const AppStack = StackNavigator({ Home: HomeScreen, Assistance: AssistanceScreen });
 
 const Pages =
@@ -21,36 +24,41 @@ const Pages =
       Home: {
         screen: HomeScreen,
         navigationOptions: ({ navigation }) => ({
-          tabBarIcon: <Image source={require('../../assets/images/home_.png')} style={styles.img}/>
+          tabBarIcon: ({tintColor, focused}) => <Image source={require('../../assets/images/home_.png')} style={[styles.img, focused && {tintColor:"#000"}]}/>
         })
       },
       Profile: {
         screen: ProfileScreen,
         navigationOptions: ({ navigation }) => ({
-          tabBarIcon: <Image source={require('../../assets/images/profile.png')} style={styles.img}/>,
+          tabBarIcon: ({tintColor, focused}) => <Image source={require('../../assets/images/profile.png')} style={[styles.img, focused && {tintColor:"#000"}]}/>,
 
         })
       },
       AddReport : {
-        screen: HomeScreen,
+        screen: ReportScreen,
         navigationOptions: ({ navigation }) => ({
-          tabBarIcon: <Image source={require('../../assets/images/segnalazione.png')} style={styles.img}/>
+          tabBarIcon: ({tintColor, focused}) => <Image source={require('../../assets/images/segnalazione.png')} style={[styles.img, styles.main, focused && {tintColor:"#000"}]}/>
+        })
+      },
+      Chat : {
+        screen: ChatScreen,
+        navigationOptions: ({ navigation }) => ({
+          tabBarIcon: ({tintColor, focused}) => <Image source={require('../../assets/images/segnalazione.png')} style={[styles.img, focused && {tintColor:"#000"}]}/>
         })
       },
       VocalAssistance: {
         screen: AssistanceScreen,
         navigationOptions: ({ navigation }) => ({
-          tabBarIcon: ({ focused, tintColor }) => { return <Image source={require('../../assets/images/vocal.png')} style={styles.img}/>}
+          tabBarIcon: ({ focused, tintColor }) => <Image source={require('../../assets/images/vocal.png')} style={[styles.img, focused && {tintColor:"#000"}]}/>
         })
       }
   }
 
 const TabBar = createBottomTabNavigator(Pages, {
-  initialRouteName: 'Profile',
+  initialRouteName: 'AddReport',
   animationEnabled: true,
   tabBarOptions: {
     showLabel: false,
-    activeTintColor: '#f00',
     style: {
      paddingVertical: 4*Vh,
      borderTopWidth:0,
@@ -75,7 +83,7 @@ const Main = createSwitchNavigator(
     Auth: AuthStack,
   },
   {
-    initialRouteName: 'Auth'
+    initialRouteName: 'App'
   }
 );
 
@@ -99,11 +107,18 @@ const styles = StyleSheet.create({
         // width: '70%',
     },
     img: {
-        transform: [
-            {scaleX: 0.3},
-            {scaleY: 0.3}
-        ],
-        // tintColor: '#f0f'
+      tintColor: 'rgba(0,0,0,0.15)',
+      transform: [
+          {scaleX: 0.325},
+          {scaleY: 0.325}
+      ],
+      padding: 10
+    },
+    main:{
+      transform: [
+          {scaleX: 0.45},
+          {scaleY: 0.45}
+      ],
     }
 });
 

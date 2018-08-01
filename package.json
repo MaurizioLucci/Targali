@@ -13,8 +13,11 @@
     "react-native-i18n": "^2.0.14",
     "react-native-keyboard-aware-scroll-view": "^0.6.0",
     "react-native-maps": "^0.21.0",
+    "react-native-photo-upload": "^1.2.0",
+    "react-native-swiper": "^1.5.13",
     "react-native-voice": "^0.2.6",
-    "react-navigation": "^2.8.0"
+    "react-navigation": "^2.8.0",
+    "tcomb-form-native": "^0.6.15"
   },
   "devDependencies": {
     "babel-jest": "23.4.0",
