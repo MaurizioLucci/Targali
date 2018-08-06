@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Voice from 'react-native-voice';
+import { AudioRecorder, AudioUtils} from 'react-native-audio';
 import { PADDING, COLOR, FONT, FONT_SIZE, Vh, Vw } from '../styles/utilities'
 import {
   StyleSheet,
@@ -45,6 +46,10 @@ class VocalAssistanceScreen extends React.Component {
 
   componentWillMount() {
     this.animation = new Animated.Value(0);
+  }
+
+  closeScreen = () =>{
+    this.props.navigation.navigate('Home')
   }
 
   onSpeechStart(e) {
@@ -187,9 +192,18 @@ class VocalAssistanceScreen extends React.Component {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Animated.View style={[styles.container, colorBackground]}>
-          <Text style={styles.title}>
-            Assistente Vocale
-          </Text>
+          <View style={styles.header}>
+            <Text style={styles.title}>
+              Assistente Vocale
+            </Text>
+            <TouchableOpacity style={styles.closeContainer} onPress={this.closeScreen}>
+              <Image
+                style={styles.closeIcon}
+                source={require('../../assets/images/close.png')}
+              />
+            </TouchableOpacity>
+          </View>
+
           <TextInput
             style={styles.text}
             editable={this.state.results.length > 0 && true}
@@ -202,16 +216,6 @@ class VocalAssistanceScreen extends React.Component {
             this.setState({data})}}>
             {this.state.results.map(result => result)}
           </TextInput>
-          {/*
-          {this.state.partialResults.map((result, index) => {
-            return (
-              <Text
-                key={`partial-result-${index}`}
-                style={styles.stat}>
-                {result}
-              </Text>
-            )
-          })} */}
           <Animated.Text style={[styles.editText, fadeIn]}>Tocca la frase per modificare</Animated.Text>
           <Animated.View style={[styles.halfPart, disapperHalfPart, fadeOut]}>
             <TouchableOpacity
@@ -269,27 +273,37 @@ const styles = StyleSheet.create({
   buttonContainer:{
     position: 'absolute',
     right: 7*Vw,
-    bottom:1*Vh,
+    bottom: 5*Vh,
     alignItems: 'center',
     flexDirection:'row'
   },
   buttonIcon: {
     tintColor: COLOR.WHITE,
-    transform: [
-        {scaleX: 0.3},
-        {scaleY: 0.3}
-    ]
+    width: 12*Vw,
+    height: 12*Vw,
   },
   buttonText: {
     fontFamily: FONT.AVENIR,
     color: "rgba(255,255,255,0.4)",
     fontSize: FONT_SIZE.DEFAULT,
-    display: 'flex'
   },
   title: {
     fontSize: FONT_SIZE.DEFAULT,
     fontFamily: FONT.AVENIR,
     color: COLOR.WHITE
+  },
+  header:{
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  closeIcon: {
+    height: 6*Vh,
+    width: 6*Vh,
+    tintColor: COLOR.WHITE,
+    transform:[
+      {translateX: 3*Vh},
+      {translateY: -2*Vh}
+    ]
   },
   text: {
     paddingTop: 8*Vh,

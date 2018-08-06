@@ -15,7 +15,7 @@ import { PADDING, COLOR, FONT, FONT_SIZE, Vh, Vw } from '../../styles/utilities'
 import { StackNavigator } from 'react-navigation';
 import Modal from './Modal'
 
-const HEADER_MAX_HEIGHT = 35 * Vh;
+const HEADER_MAX_HEIGHT = 30 * Vh;
 const HEADER_MIN_HEIGHT = 14 * Vh;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
@@ -24,64 +24,40 @@ class ProfileScreen extends Component {
     super();
     this.animation = new Animated.Value(0)
     this.modal = new Animated.Value(0)
+    this.changeVehicle =
     this.state = {
       user: {
-        plate: 'DJ148WR',
+        vehicles: [
+          {
+            plate: 'AB147WR',
+            model: 'Fiat Punto',
+            animation: new Animated.Value(0)
+          },
+          {
+            plate: 'DJ148WR',
+            model: 'Fiat Pandino',
+            animation: new Animated.Value(0)
+          },
+          {
+            plate: 'EF149WR',
+            model: 'Ghini Diablo',
+            animation: new Animated.Value(0)
+          },
+          {
+            plate: 'GH150WR',
+            model: 'Audi TT',
+            animation: new Animated.Value(0)
+          },
+        ],
         name: 'Simone Matrone',
         mail: 'simone@loud.com',
-        model: 'Fiat Pandino',
-        phoneNumber: '+39 3391159385'
-      },
-      chat: [
-        {
-          coordinate: {
-            latitude: 45.437300,
-            longitude: 9.195172,
-          },
-          type: "Rimozione",
-          address: "Via Sereno Tagliabue 1, Cusano Milanino",
-          status: 'Segnalazione Fatta',
-          image: "https://i.imgur.com/sNam9iJ.jpg",
-          plate: "DJ148WR",
-          color: 'rgb(255, 46, 82)',
-        },
-        {
-          coordinate: {
-            latitude: 45.446302,
-            longitude: 9.205072,
-          },
-          type: "Fari accesi",
-          address: "Via Sereno Tagliabue 2, Cusano Milanino",
-          status: 'Segnalazione Fatta',
-          image: "https://i.imgur.com/N7rlQYt.jpg",
-          plate: "GH148WR",
-          color: 'rgb(255, 191, 0)',
-        },
-        {
-          coordinate: {
-            latitude: 45.446320,
-            longitude: 9.213162,
-          },
-          type: "Like",
-          address: "Via Sereno Tagliabue 3, Cusano Milanino",
-          status: 'Segnalazione Fatta',
-          image: "https://i.imgur.com/UDrH0wm.jpg",
-          plate: "OK148WR",
-          color: 'rgb(28, 211, 176)',
-        },
-        {
-          coordinate: {
-            latitude: 45.436320,
-            longitude: 9.207082,
-          },
-          type: "Rimozione",
-          address: "Via Sereno Tagliabue 4, Cusano Milanino",
-          status: 'Segnalazione Fatta',
-          image: "https://i.imgur.com/Ka8kNST.jpg",
-          plate: "BE148WR",
-          color: 'rgb(255, 46, 82)',
+        phoneNumber: '+39 3391159385',
+        selectedVehicle: {
+          plate: 'DJ148WR',
+          model: 'Fiat Pandino',
+          animation: new Animated.Value(0)
         }
-      ]
+      }
     }
   }
 
@@ -95,10 +71,33 @@ class ProfileScreen extends Component {
       }
     ).start();
   }
+
   editUser = (data) => {
     console.log(data)
     this.setState({user:data})
   }
+
+  changeActiveVehicle = (item, index) =>{
+    ;
+    this.setState({
+      user:{
+        ...this.state.user,
+        selectedVehicle:{
+          plate: item.plate,
+          model: item.model,
+          animation: Animated.timing(
+                      item.animation,{
+                        delay: 0,
+                        toValue: 1,
+                        duration: 450,
+                        easing: Easing.bezier(.65,0,.7,1)
+                      }
+                    ).start()
+        }
+      }
+    })
+  }
+
   render() {
     const headerHeight = this.animation.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -131,30 +130,42 @@ class ProfileScreen extends Component {
           translateY: translateModal
         }]
     }
+    const interpolationsVehicles = this.state.user.vehicles.map((item, index) => {
+      const opacity = item.animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [1, 0],
+        extrapolate: "clamp",
+      });
+      const translateY = item.animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, -10],
+        extrapolate: "clamp",
+      });
+      return { translateY, opacity };
+    })
     return(
       <View style={styles.container}>
         <Animated.View style={[styles.header, {height: headerHeight}]}>
           <View style={styles.profileContainer}>
             <View style={styles.profileTitleContainer}>
-              <Text style={styles.profileTitle}>Profilo & Messaggi</Text>
+              <Text style={styles.profileTitle}>Profilo</Text>
               <TouchableOpacity
                 style={styles.profileEditBtn}
                 onPress={()=>this.openModal(1)}>
                 <Image
                   style={styles.settingsIcon}
-                  source={require('../../../assets/images/vocal.png')}
+                  source={require('../../../assets/images/settings.png')}
                 />
               </TouchableOpacity>
             </View>
-            <Animated.Text style={[styles.plateText, styleHeader]}>{this.state.user.plate}</Animated.Text>
+            <Animated.Text style={[styles.plateText, styleHeader]}>{this.state.user.selectedVehicle.plate}</Animated.Text>
             <Animated.View style={[styles.userContainer, styleHeader]}>
               <View style={styles.userSection}>
-                <Text style={styles.labelUserSection}>Nome</Text>
-                <Text style={styles.contentUserSection}>{this.state.user.name}</Text>
+                <Text style={styles.labelUserSection}>Marca e Modello</Text>
+                <Text style={styles.contentUserSection}>{this.state.user.selectedVehicle.model}</Text>
               </View>
-              <View style={[styles.userSection, {marginLeft: 8*Vw}]}>
-                <Text style={styles.labelUserSection}>Indirizzo E-Mail</Text>
-                <Text style={styles.contentUserSection}>{this.state.user.mail}</Text>
+              <View style={styles.userSection}>
+                <Text style={styles.contentUserSection}>33 segnalazioni</Text>
               </View>
             </Animated.View>
           </View>
@@ -166,24 +177,28 @@ class ProfileScreen extends Component {
             [{nativeEvent: {contentOffset: {y: this.animation}}}]
           )}>
           <View style={{marginTop:HEADER_MAX_HEIGHT}}>
-          {this.state.chat.map((item, key) =>{
-            return(
-            <View key={key} style={styles.elementList}>
-              <View style={styles.leftPartList}>
-                <Text style={[styles.typeList, {color:item.color}]}>{item.type}</Text>
-                <Text style={styles.statusList}>{item.status}</Text>
-              </View>
-              <View style={styles.rightPartList}>
-                <TouchableOpacity
-                  style={styles.returnReportBtn}>
-                  <Image
-                    style={styles.settingsIcon}
-                    source={require('../../../assets/images/vocal.png')}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )})}
+          {this.state.user.vehicles.map((item, index) =>{
+            if(item.plate !== this.state.user.selectedVehicle.plate){
+              return(
+                <View key={index} style={styles.elementList}>
+                  <Animated.View style={[styles.leftPartList, {opacity: interpolationsVehicles[index].opacity}]}>
+                    <Text style={styles.plateList}>{item.plate}</Text>
+                    <Text style={styles.modelList}>{item.model}</Text>
+                  </Animated.View>
+                  <View style={styles.rightPartList}>
+                    <TouchableOpacity
+                      style={styles.returnReportBtn}
+                      onPress={() => this.changeActiveVehicle(item, index)}>
+                      <Image
+                        style={styles.switchIcon}
+                        source={require('../../../assets/images/switch.png')}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )
+            }
+            })}
         </View>
         </ScrollView>
         <Modal
@@ -204,8 +219,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.WHITE
   },
   profileContainer:{
-    paddingVertical: 4*Vh,
-    paddingHorizontal: PADDING.HORIZONTAL_CONTAINER
+    flex: 1,
+    paddingTop: 5*Vh,
+    paddingBottom: 2*Vh,
+    paddingHorizontal: PADDING.HORIZONTAL_CONTAINER,
+    justifyContent: 'space-between'
   },
   profileTitleContainer:{
     flexDirection: 'row',
@@ -213,40 +231,47 @@ const styles = StyleSheet.create({
   },
   profileTitle: {
     fontSize: FONT_SIZE.DEFAULT,
-    color: COLOR.GREY_DARKER,
+    color: 'rgba(250,250,250, 0.4)',
     fontFamily: FONT.AVENIR
   },
   profileEditBtn:{
     marginLeft: 'auto',
   },
   settingsIcon: {
-    marginLeft: 'auto',
-    tintColor: COLOR.GREY_DARKER,
-    transform: [
-        {scaleX: 0.3},
-        {scaleY: 0.3}
+    tintColor: 'rgba(250,250,250, 0.4)',
+    height: 6*Vh,
+    width: 6*Vh,
+    transform:[
+      {translateX: 3*Vw}
     ]
+  },
+  switchIcon: {
+    marginLeft: 'auto',
+    tintColor: 'rgba(200,200,200,0.6)',
+    height: 5*Vh,
+    width: 5*Vh
   },
   plateText:{
     fontSize: FONT_SIZE.XL,
-    color: COLOR.BLACK,
+    color: COLOR.WHITE,
     fontFamily: FONT.BEBAS,
+    marginTop: 'auto'
   },
   userContainer:{
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 2*Vh
+    alignItems: 'flex-end',
+    marginTop: 'auto',
+    justifyContent: 'space-between'
   },
   labelUserSection:{
     fontSize: FONT_SIZE.S,
-    color: COLOR.GREY,
+    color: 'rgba(250,250,250, 0.4)',
     fontFamily: FONT.AVENIR,
     marginBottom: 1*Vh,
-    opacity:0.7
   },
   contentUserSection:{
     fontSize: FONT_SIZE.DEFAULT,
-    color: COLOR.BLACK,
+    color: COLOR.WHITE,
     fontFamily: FONT.AVENIR
   },
   elementList:{
@@ -260,14 +285,15 @@ const styles = StyleSheet.create({
   rightPartList:{
     marginLeft: 'auto'
   },
-  typeList: {
+  plateList: {
     fontSize: FONT_SIZE.L,
     fontFamily: FONT.BEBAS,
+    color: COLOR.BLACK,
     marginBottom: 1.5*Vh
   },
-  statusList: {
+  modelList: {
     fontSize: FONT_SIZE.S,
-    color: COLOR.BLACK,
+    color: COLOR.GREY,
     fontFamily: FONT.AVENIR
   },
   header: {
@@ -276,7 +302,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     overflow: 'hidden',
-    backgroundColor: 'rgb(250,250,250)'
+    backgroundColor: COLOR.BLUE
   },
 });
 

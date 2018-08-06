@@ -27,9 +27,9 @@ export const FONT = {
 };
 
 export const FONT_SIZE = {
-  DEFAULT: 14,
-  S: 12,
-  M: 23,
-  L: 33,
-  XL: 60
+  DEFAULT:3.6*Vw,
+  S: 3.1*Vw,
+  M: 4.8*Vw,
+  L: 9*Vw,
+  XL: 16*Vw
 };

@@ -35,7 +35,7 @@ class ModalScreen extends Component {
           <TouchableOpacity onPress={this.props.closeModal}>
             <Image
               style={styles.closeIcon}
-              source={require('../../../assets/images/vocal.png')}
+              source={require('../../../assets/images/close.png')}
             />
           </TouchableOpacity>
         </View>
@@ -161,14 +161,12 @@ class ModalScreen extends Component {
     },
     closeBtn:{
       position: 'absolute',
-      right: 2*Vw,
-      top: 3*Vh
+      right: 3*Vw,
+      top: 5*Vh
     },
     closeIcon: {
-      transform: [
-          {scaleX: 0.3},
-          {scaleY: 0.3}
-      ]
+      height: 6*Vh,
+      width: 6*Vh,
     }
   })
 

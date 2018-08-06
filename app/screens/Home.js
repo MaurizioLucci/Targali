@@ -39,62 +39,62 @@ class HomeScreen extends Component {
     super();
     this.state = {
       markers:[
-        // {
-        //   coordinate: {
-        //     latitude: 45.437300,
-        //     longitude: 9.195172,
-        //   },
-        //   type: "Rimozione",
-        //   address: "Via Sereno Tagliabue 1, Cusano Milanino",
-        //   status: 'Segnalazione Fatta',
-        //   image: Images[0],
-        //   plate: "DJ148WR",
-        //   color: 'rgb(255, 46, 82)',
-        //   card: 'close',
-        //   animation: new Animated.Value(0),
-        // },
-        // {
-        //   coordinate: {
-        //     latitude: 45.446302,
-        //     longitude: 9.205072,
-        //   },
-        //   type: "Fari accesi",
-        //   address: "Via Sereno Tagliabue 2, Cusano Milanino",
-        //   status: 'Segnalazione Fatta',
-        //   image: Images[1],
-        //   plate: "GH148WR",
-        //   color: 'rgb(255, 191, 0)',
-        //   card: 'close',
-        //   animation: new Animated.Value(0),
-        // },
-        // {
-        //   coordinate: {
-        //     latitude: 45.446320,
-        //     longitude: 9.213162,
-        //   },
-        //   type: "Like",
-        //   address: "Via Sereno Tagliabue 3, Cusano Milanino",
-        //   status: 'Segnalazione Fatta',
-        //   image: Images[2],
-        //   plate: "OK148WR",
-        //   color: 'rgb(28, 211, 176)',
-        //   card: 'close',
-        //   animation: new Animated.Value(0),
-        // },
-        // {
-        //   coordinate: {
-        //     latitude: 45.436320,
-        //     longitude: 9.207082,
-        //   },
-        //   type: "Rimozione",
-        //   address: "Via Sereno Tagliabue 4, Cusano Milanino",
-        //   status: 'Segnalazione Fatta',
-        //   image: Images[3],
-        //   plate: "BE148WR",
-        //   color: 'rgb(255, 46, 82)',
-        //   card: 'close',
-        //   animation: new Animated.Value(0),
-        // },
+        {
+          coordinate: {
+            latitude: 45.437300,
+            longitude: 9.195172,
+          },
+          type: "Rimozione",
+          address: "Via Sereno Tagliabue 1, Cusano Milanino",
+          status: 'Segnalazione Fatta',
+          image: Images[0],
+          plate: "DJ148WR",
+          color: 'rgb(255, 46, 82)',
+          card: 'close',
+          animation: new Animated.Value(0),
+        },
+        {
+          coordinate: {
+            latitude: 45.446302,
+            longitude: 9.205072,
+          },
+          type: "Fari accesi",
+          address: "Via Sereno Tagliabue 2, Cusano Milanino",
+          status: 'Segnalazione Fatta',
+          image: Images[1],
+          plate: "GH148WR",
+          color: 'rgb(255, 191, 0)',
+          card: 'close',
+          animation: new Animated.Value(0),
+        },
+        {
+          coordinate: {
+            latitude: 45.446320,
+            longitude: 9.213162,
+          },
+          type: "Like",
+          address: "Via Sereno Tagliabue 3, Cusano Milanino",
+          status: 'Segnalazione Fatta',
+          image: Images[2],
+          plate: "OK148WR",
+          color: 'rgb(28, 211, 176)',
+          card: 'close',
+          animation: new Animated.Value(0),
+        },
+        {
+          coordinate: {
+            latitude: 45.436320,
+            longitude: 9.207082,
+          },
+          type: "Rimozione",
+          address: "Via Sereno Tagliabue 4, Cusano Milanino",
+          status: 'Segnalazione Fatta',
+          image: Images[3],
+          plate: "BE148WR",
+          color: 'rgb(255, 46, 82)',
+          card: 'close',
+          animation: new Animated.Value(0),
+        },
       ],
       region: {
         latitude: 0,
@@ -282,10 +282,7 @@ class HomeScreen extends Component {
               </View>
             </Animated.View>
             <Animated.View style={[styles.containerBtn, button]}>
-              <CustomButton buttonStyle={styles.chatBtn} textStyle={styles.chatTextBtn} text='Vai alla chat'/>
-              {/* <TouchableOpacity style={styles.chatBtn}>
-                <Text style={styles.chatTextBtn}>Vai alla chat</Text>
-              </TouchableOpacity> */}
+              <CustomButton buttonStyle={styles.chatBtn} textStyle={styles.chatTextBtn} text='Vai alla chat' onPress={()=> this.props.navigation.navigate('Chat')}/>
             </Animated.View>
           </Animated.View>
           </TouchableWithoutFeedback>
