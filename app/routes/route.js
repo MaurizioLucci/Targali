@@ -58,7 +58,7 @@ const Pages =
   }
 
 const TabBar = createBottomTabNavigator(Pages, {
-  initialRouteName: 'Profile',
+  initialRouteName: 'Chat',
   animationEnabled: true,
   tabBarOptions: {
     showLabel: false,
