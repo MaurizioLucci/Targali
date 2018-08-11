@@ -8,18 +8,20 @@ import {
     Image,
     Time,
     TouchableWithoutFeedback,
-    SafeAreaView
+    Keyboard
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH, PADDING, COLOR, FONT, FONT_SIZE, Vh, Vw } from '../../styles/utilities'
 import CustomButton from '../../components/CustomButton'
 import MapView from 'react-native-maps'
 import { Marker } from 'react-native-maps'
 import { GiftedChat, Actions, Bubble, Message, Avatar, MessageImage, InputToolbar, TextInput} from '../../utilities/react-native-gifted-chat'
-import moment from 'moment/min/moment-with-locales';
+import moment from 'moment/min/moment-with-locales'
+import { isIphoneX } from '../../utilities/iPhoneX'
 
 const locale = window.navigator.userLanguage || window.navigator.language
 const ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
 const LATITUDE_DELTA = 0.01;
+
 
 class MessageScreen extends Component {
   constructor() {
@@ -48,7 +50,7 @@ class MessageScreen extends Component {
           }
         }
       ]
-    })
+    }, () => console.log(isIphoneX()))
   }
   renderMessageImage(props){
     return(
@@ -61,7 +63,7 @@ class MessageScreen extends Component {
     if(!props.currentMessage.nextMessage.user || props.currentMessage.user._id !== props.currentMessage.nextMessage.user._id){
       margin = 20
     } else{
-      margin = 0
+      margin = "auto"
     }
     if(props.currentMessage.report){
       let time = moment(props.currentMessage.createdAt).locale('it').format('LLLL')
@@ -83,8 +85,8 @@ class MessageScreen extends Component {
       return (
         <Bubble
           {...props}
-          wrapperStyle={{right: { flexDirection: 'row', borderRadius: 4, marginBottom: margin, backgroundColor: 'rgba(200,200,200,0.1)'}, left: { flexDirection: 'row', marginBottom: margin, borderRadius: 4, backgroundColor: 'rgba(200,200,200,0.1)'}}}
-          textStyle={{ right: { color: COLOR.BLACK, fontFamily: FONT.AVENIR, fontSize: 15 }, left: { color: COLOR.BLACK, fontFamily: FONT.AVENIR, fontSize: 15 } }}
+          wrapperStyle={{right: { justifyContent:'center', flexDirection: 'row', borderRadius: 4, marginBottom: margin, backgroundColor: COLOR.BLUE}, left: { flexDirection: 'row', marginBottom: margin, borderRadius: 4, backgroundColor: 'rgba(200,200,200,0.1)'}}}
+          textStyle={{ right: { paddingTop:3, color: COLOR.WHITE, fontFamily: FONT.AVENIR, fontSize: 15 }, left: { paddingTop:3, color: COLOR.BLACK, fontFamily: FONT.AVENIR, fontSize: 15 } }}
         />
       );
     }
@@ -106,17 +108,9 @@ class MessageScreen extends Component {
 
   renderInputToolbar(props){
      return (
-          <View style={{height:10*Vh, backgroundColor:'rgba(200,200,200,0.2)', alignContent:'center', justifyContent: 'flex-end'}}>
-            <InputToolbar {...props} containerStyle={{ marginTop: 'auto', marginBottom:'auto', marginHorizontal: 3*Vw, borderRadius:100, borderTopWidth:0, backgroundColor: COLOR.WHITE }}/>
-          </View>
-    )
-  }
-
-  renderMessage(props){
-    return(
-      <Message {...props} style={{flexDirection: 'column', backgroundColor: COLOR.RED}}>
-        SEEEE
-      </Message>
+      <View style={{paddingTop:1.5*Vh, paddingBottom:15*Vh, backgroundColor:'rgba(200,200,200,0.2)', justifyContent:'center', borderTopWidth: 0.7, borderTopColor: 'rgba(0,0,0,0.1)',}}>
+        <InputToolbar {...props} containerStyle={{ marginTop: 'auto', marginBottom:'auto', marginHorizontal: 3*Vw, borderRadius:16*Vw, backgroundColor: COLOR.WHITE, overflow:'hidden' }}/>
+      </View>
     )
   }
 
@@ -143,54 +137,55 @@ class MessageScreen extends Component {
     const item = navigation.getParam('item', 'Nodai')
     return (
         <View style={styles.container}>
-          <View style={styles.mapContainer}>
-            <TouchableOpacity style={styles.nextStepContainer} onPress={() => this.props.navigation.goBack()}>
-              <Image
-                style={styles.nextStep}
-                source={require('../../../assets/images/arrow.png')}
-              />
-            </TouchableOpacity>
-            <MapView
-              style={styles.map}
-              initialRegion={{
-                latitude: this.state.item.coordinate.latitude,
-                longitude: this.state.item.coordinate.longitude,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LATITUDE_DELTA * ASPECT_RATIO,
-              }}
-              zoomEnabled={false}
-              rotateEnabled={false}
-              scrollEnabled={false}
-              ref={map => this.map = map}
-            >
-              <Marker coordinate={this.state.item.coordinate}>
-                <Animated.View style={styles.markerWrap}>
-                  <Animated.View style={styles.ring} />
-                  <Animated.View style={styles.marker} />
-                </Animated.View>
-              </Marker>
-            </MapView>
-          </View>
-          <View style={styles.addressContainer}>
-            <Text style={styles.addressText}>
-              Segnalazione in {this.state.item.address}
-            </Text>
-          </View>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View>
+              <View style={styles.mapContainer}>
+                <TouchableOpacity style={styles.nextStepContainer} onPress={() => this.props.navigation.goBack()}>
+                  <Image
+                    style={styles.nextStep}
+                    source={require('../../../assets/images/arrow.png')}
+                  />
+                </TouchableOpacity>
+                <MapView
+                  style={styles.map}
+                  initialRegion={{
+                    latitude: this.state.item.coordinate.latitude,
+                    longitude: this.state.item.coordinate.longitude,
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LATITUDE_DELTA * ASPECT_RATIO,
+                  }}
+                  zoomEnabled={false}
+                  rotateEnabled={false}
+                  scrollEnabled={false}
+                  ref={map => this.map = map}
+                >
+                  <Marker coordinate={this.state.item.coordinate}>
+                    <Animated.View style={styles.markerWrap}>
+                      <Animated.View style={styles.ring} />
+                      <Animated.View style={styles.marker} />
+                    </Animated.View>
+                  </Marker>
+                </MapView>
+              </View>
+              <View style={styles.addressContainer}>
+                <Text style={styles.addressText}>
+                  Segnalazione in {this.state.item.address}
+                </Text>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
            <GiftedChat
-            textInputProps={{fontSize: 15, fontFamily: FONT.AVENIR}}
             messages={this.state.messages}
             locale='it'
             onSend={messages => this.onSend(messages)}
-            renderMessage={this.renderMessage}
             renderBubble={(props)=>this.renderBubble(props, this.state.item.color)}
             renderTime={this.renderTime}
             renderMessageImage={this.renderMessageImage}
             renderAvatar={(props)=>this.renderAvatar(props, this.state.item.color)}
             renderAvatarOnTop={true}
             renderInputToolbar={this.renderInputToolbar}
-            textInputProps={this.renderInputText}
-            // bottomOffset={-4*Vh}
-            minInputToolbarHeight={10*Vh}
+            bottomOffset={1*Vh}
+            minInputToolbarHeight={11*Vh}
             user={{
               _id: 1,
             }}
@@ -210,8 +205,8 @@ const styles = StyleSheet.create({
   },
   nextStepContainer:{
     position: 'absolute',
-    top: PADDING.VERTICAL_CONTAINER/2,
-    left: PADDING.HORIZONTAL_CONTAINER/2,
+    top: 2*Vh,
+    left: 0,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 100,

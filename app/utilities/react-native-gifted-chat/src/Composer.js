@@ -59,8 +59,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 15,
     lineHeight: 15,
-    paddingTop:9,
+    paddingTop: 9,
+    paddingLeft: 5,
     fontFamily: FONT.AVENIR,
+    overflow: 'hidden',
+    bottom: 0,
     marginTop: Platform.select({
       ios: 5,
       android: 0,

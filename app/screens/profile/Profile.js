@@ -180,22 +180,25 @@ class ProfileScreen extends Component {
           {this.state.user.vehicles.map((item, index) =>{
             if(item.plate !== this.state.user.selectedVehicle.plate){
               return(
-                <View key={index} style={styles.elementList}>
+                <TouchableOpacity
+                  style={styles.returnReportBtn}
+                  key={index}
+                  onPress={() => this.changeActiveVehicle(item, index)}>
+                <View style={styles.elementList}>
                   <Animated.View style={[styles.leftPartList, {opacity: interpolationsVehicles[index].opacity}]}>
                     <Text style={styles.plateList}>{item.plate}</Text>
                     <Text style={styles.modelList}>{item.model}</Text>
                   </Animated.View>
                   <View style={styles.rightPartList}>
-                    <TouchableOpacity
-                      style={styles.returnReportBtn}
-                      onPress={() => this.changeActiveVehicle(item, index)}>
+
                       <Image
                         style={styles.switchIcon}
                         source={require('../../../assets/images/switch.png')}
                       />
-                    </TouchableOpacity>
+
                   </View>
                 </View>
+                </TouchableOpacity>
               )
             }
             })}

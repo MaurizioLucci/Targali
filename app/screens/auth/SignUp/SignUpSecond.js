@@ -10,9 +10,9 @@ import {
     Easing,
     AsyncStorage
 } from 'react-native';
-import { PADDING, COLOR, FONT, FONT_SIZE, Vh, Vw } from '../../styles/utilities'
+import { PADDING, COLOR, FONT, FONT_SIZE, Vh, Vw } from '../../../styles/utilities'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import CustomButton from '../../components/CustomButton'
+import CustomButton from '../../../components/CustomButton'
 
 class SignupScreen extends Component {
   constructor(){
@@ -179,15 +179,15 @@ class SignupScreen extends Component {
   }
 
   registration = () =>{
-    if(
-      this.state.input.name.validate &&
-      this.state.input.mail.validate &&
-      this.state.input.phone.validate &&
-      this.state.input.plate.validate &&
-      this.state.input.model.validate
-    ){
-      this.props.navigation.navigate('App')
-    }
+    // if(
+    //   this.state.input.name.validate &&
+    //   this.state.input.mail.validate &&
+    //   this.state.input.phone.validate &&
+    //   this.state.input.plate.validate &&
+    //   this.state.input.model.validate
+    // ){
+      this.props.navigation.navigate('SignUpThird')
+    // }
   }
 
   render() {
@@ -216,7 +216,7 @@ class SignupScreen extends Component {
 
     return (
       <View style={styles.container}>
-          <Text style={styles.title}>Registrazione</Text>
+          <Text style={styles.title}>Registrazione2</Text>
           <KeyboardAwareScrollView
             style={styles.form}
             scrollEnabled={true}
@@ -337,8 +337,8 @@ class SignupScreen extends Component {
             </View>
           </KeyboardAwareScrollView>
           <View style={styles.buttons}>
-            <CustomButton buttonStyle={styles.signupBtn} textStyle={styles.signupTextBtn} text="Registrati" onPress={() => this.registration()}/>
-            <CustomButton buttonStyle={styles.loginBtn} textStyle={styles.loginTextBtn} text="Sei già Registrato? Login" onPress={() => this.props.navigation.navigate('LogIn')}/>
+            <CustomButton buttonStyle={styles.signupBtn} textStyle={styles.signupTextBtn} text="Completa registrazione" onPress={() => this.registration()}/>
+            <CustomButton buttonStyle={styles.loginBtn} textStyle={styles.loginTextBtn} text="Torna indietro" onPress={() => this.props.navigation.goBack()}/>
           </View>
       </View>
     );
@@ -399,7 +399,6 @@ const styles = StyleSheet.create({
   },
   loginTextBtn:{
     color:'rgba(18,18,18,0.2)',
-    textDecorationLine: 'underline',
     fontSize: FONT_SIZE.S,
   },
   feedbackGreenText:{

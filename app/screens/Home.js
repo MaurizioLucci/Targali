@@ -282,7 +282,7 @@ class HomeScreen extends Component {
               </View>
             </Animated.View>
             <Animated.View style={[styles.containerBtn, button]}>
-              <CustomButton buttonStyle={styles.chatBtn} textStyle={styles.chatTextBtn} text='Vai alla chat' onPress={()=> this.props.navigation.navigate('Chat')}/>
+              <CustomButton buttonStyle={styles.chatBtn} textStyle={styles.chatTextBtn} text='Vai alla chat' onPress={()=> this.props.navigation.navigate('Message', {item:marker})}/>
             </Animated.View>
           </Animated.View>
           </TouchableWithoutFeedback>

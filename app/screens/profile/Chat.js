@@ -3,7 +3,7 @@ import {
     Text,
     View,
     ScrollView,
-    TouchableOpacity,
+    TouchableWithoutFeedback,
     Image,
     StyleSheet
 } from 'react-native';
@@ -80,20 +80,22 @@ class ChatScreen extends Component {
               {this.state.chat.map((item, key) =>{
                 return(
                 <View key={key} style={styles.elementList}>
-                  <View style={styles.leftPartList}>
-                    <Text style={[styles.typeList, {color:item.color}]}>{item.type}</Text>
-                    <Text style={styles.statusList}>{item.status}</Text>
-                  </View>
-                  <View style={styles.rightPartList}>
-                    <TouchableOpacity
-                      style={styles.returnReportBtn}
-                      onPress={()=>this.props.navigation.navigate('Message', {item:item})}>
-                      <Image
-                        style={styles.chatIcon}
-                        source={require('../../../assets/images/message.png')}
-                      />
-                    </TouchableOpacity>
-                  </View>
+                  <TouchableWithoutFeedback
+                    style={styles.returnReportBtn}
+                    onPress={()=>this.props.navigation.navigate('Message', {item:item})}>
+                    <View style={styles.touchableElement}>
+                      <View style={styles.leftPartList}>
+                        <Text style={[styles.typeList, {color:item.color}]}>{item.type}</Text>
+                        <Text style={styles.statusList}>{item.status}</Text>
+                      </View>
+                      <View style={styles.rightPartList}>
+                        <Image
+                          style={styles.chatIcon}
+                          source={require('../../../assets/images/message.png')}
+                        />
+                      </View>
+                    </View>
+                  </TouchableWithoutFeedback>
                 </View>
               )})}
             </ScrollView>
@@ -133,6 +135,10 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgba(0,0,0,0.03)',
     borderBottomWidth: 1,
     alignItems: 'center',
+  },
+  touchableElement:{
+    width: '100%',
+    justifyContent: 'center',
     flexDirection: 'row'
   },
   rightPartList:{

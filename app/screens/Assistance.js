@@ -49,7 +49,8 @@ class VocalAssistanceScreen extends React.Component {
   }
 
   closeScreen = () =>{
-    this.props.navigation.navigate('Home')
+      this.props.navigation.goBack()
+      // this.props.navigation.navigate('Home')
   }
 
   onSpeechStart(e) {

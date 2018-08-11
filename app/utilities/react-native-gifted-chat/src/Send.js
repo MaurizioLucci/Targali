@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginRight: 10,
     // transform:[{translateX:45}],
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: 'rgba(0,0,0,0)',
   },
   text: {
     fontFamily: FONT.AVENIR,
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     marginLeft: 10,
     zIndex: 200,
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: 'rgba(0,0,0,0)',
   },
 });
 

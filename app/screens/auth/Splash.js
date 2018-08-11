@@ -52,7 +52,7 @@ class SplashScreen extends Component {
               <Image style={styles.image} resizeMode="contain" source={require('../../../assets/images/welcome-image.png')}/>
             </View>
             <View style={styles.buttonsContainer}>
-              <CustomButton buttonStyle={styles.signupBtn} textStyle={styles.signupTextBtn} text="Registrati" onPress={() => this.props.navigation.navigate('SignUp')}/>
+              <CustomButton buttonStyle={styles.signupBtn} textStyle={styles.signupTextBtn} text="Registrati" onPress={() => this.props.navigation.navigate('SignUpFirst')}/>
               <CustomButton buttonStyle={styles.loginBtn} textStyle={styles.loginTextBtn} text="Accedi" onPress={() => this.props.navigation.navigate('LogIn')}/>
             </View>
         </View>
