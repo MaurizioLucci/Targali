@@ -9,10 +9,11 @@ import {
     Animated,
     Easing,
     AsyncStorage,
-    Picker
+    TouchableWithoutFeedback
 } from 'react-native';
 import { PADDING, COLOR, FONT, FONT_SIZE, Vh, Vw } from '../../../styles/utilities'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import RNPickerSelect from 'react-native-picker-select'
 import CustomButton from '../../../components/CustomButton'
 import CustomTextInput from '../../../components/TextInputPlaceholder'
 
@@ -21,10 +22,9 @@ class SignupScreen extends Component {
     super()
     this.state = {
       data:{
-        car: {
-          plate: '',
-          model:''
-        }
+        plate: '',
+        brand: '',
+        model: '',
       },
       input: {
         plate:{
@@ -34,42 +34,47 @@ class SignupScreen extends Component {
           error: 'Targa non valida',
           animation: new Animated.Value(0),
           focusInput: new Animated.Value(0),
-        },
-        model:{
-          value: '',
-          focus:false,
-          validate: false,
-          error: 'Inserisci il modello',
-          animation: new Animated.Value(0),
-          focusInput: new Animated.Value(0),
         }
       },
+      brands:[
+        {label:'Mercedes', value:'mercedes'},
+        {label:'Audi', value:'audi'},
+        {label:'BMW', value:'BMW'},
+        {label:'Hyundai', value:'hyundai'},
+        {label:'Toyota', value:'toyota'},
+      ],
+      models:{
+        mercedes:[
+          {label:'A160', value:'A160'},
+          {label:'A180', value:'A180'},
+          {label:'A200', value:'A200'},
+          {label:'A220', value:'A220'},
+          {label:'A250', value:'A250'},
+        ],
+        audi:[
+          {label:'Q2', value:'Q2'},
+          {label:'Q3', value:'Q3'},
+          {label:'Q5', value:'Q5'},
+          {label:'Q7', value:'Q7'},
+          {label:'Q8', value:'Q8'},
+        ],
+        BMW:[
+          {label:'X1', value:'X1'},
+          {label:'X2', value:'X2'},
+          {label:'X3', value:'X3'},
+          {label:'X4', value:'X4'},
+          {label:'X5', value:'X5'},
+        ]
+      },
+      brand:'mercedes',
+      model:'',
       feedback:[],
       focusInput:[],
-      cars:[
-        {brand:'Mercedes', model:'A160'},
-        {brand:'Mercedes', model:'A180'},
-        {brand:'Mercedes', model:'A200'},
-        {brand:'Mercedes', model:'A220'},
-        {brand:'Mercedes', model:'A250'},
-        {brand:'Audi', model:'Q2'},
-        {brand:'Audi', model:'Q3'},
-        {brand:'Audi', model:'Q5'},
-        {brand:'Audi', model:'Q7'},
-        {brand:'Audi', model:'Q8'},
-        {brand:'BMW', model:'X1'},
-        {brand:'BMW', model:'X2'},
-        {brand:'BMW', model:'X3'},
-        {brand:'BMW', model:'X4'},
-        {brand:'BMW', model:'X5'},
-      ],
-      brands:['Mercedes', 'Audi', 'BMW', 'Hyundai', 'Toyota'],
-      brand:'',
-      model:''
     }
   }
 
   componentWillMount(){
+    this.animation = new Animated.Value(0)
     const inputs = Object.values(this.state.input)
     const animations = inputs.map((item, index) => {
       return item.animation})
@@ -118,17 +123,14 @@ class SignupScreen extends Component {
     let bool = false
     let val = 1
     if(name == 'plate'){
-      console.log('primo if')
       var plateCheck = /(([A-Z]{2})+(\d{3})+([A-Z]{1,2}))\w/
-      console.log(plateCheck.test(this.state.input.plate.value))
       if(plateCheck.test(this.state.input.plate.value)){
         bool = true
       }
     }
-     else if (this.state.input[name].value.length>0){
+    else if (this.state.input[name].value.length>0){
       bool = true
     }
-
     this.setState({
       input:{
         ...this.state.input,
@@ -159,15 +161,34 @@ class SignupScreen extends Component {
   }
 
   registration = () =>{
-    // if(
-    //   this.state.input.name.validate &&
-    //   this.state.input.mail.validate &&
-    //   this.state.input.phone.validate &&
-    //   this.state.input.plate.validate &&
-    //   this.state.input.model.validate
-    // ){
+    if(
+      this.state.input.plate.validate && this.state.brand && this.state.model
+    ){
+      this.setState({
+        data:{
+          plate:this.state.input.plate.value,
+          brand:this.state.brand,
+          model:this.state.model
+        }
+      }, () => Animated.timing(
+        this.animation, {
+          delay: 0,
+          toValue: 0,
+          duration: 600,
+          easing: Easing.bezier(.65,0,.7,1)
+        }
+      ).start())
       this.props.navigation.navigate('SignUpSecond')
-    // }
+    } else {
+      Animated.timing(
+        this.animation, {
+          delay: 0,
+          toValue: 1,
+          duration: 600,
+          easing: Easing.bezier(.65,0,.7,1)
+        }
+      ).start();
+    }
   }
 
   render() {
@@ -193,26 +214,35 @@ class SignupScreen extends Component {
       });
       return { color };
     });
+    const translateError = this.animation.interpolate({
+      inputRange: [0,1],
+      outputRange: [20, 0],
+      extrapolate: "clamp",
+    })
+    const opacityError = this.animation.interpolate({
+      inputRange: [0,1],
+      outputRange: [0,1],
+      extrapolate: "clamp",
+    })
 
     return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
           <Text style={styles.title}>Registrazione</Text>
           <Text style={styles.subtitle}>Il primo step è la registrazione del tuo veicolo</Text>
             <View style={styles.section}>
-              <Text style={styles.label}>Targa</Text>
               <TextInput
                 style={styles.inputText}
                 placeholder={'Inserisci il numero di Targa*'}
                 editable={true}
-                returnKeyType='next'
+                returnKeyType='done'
                 blurOnSubmit={false}
                 autoCapitalize='characters'
                 value={''}
                 onFocus={() => this.inputOnFocus('plate')}
                 onChangeText={(plate) => {this.handleState('plate', plate)}}
-                ref={(input) => { this.fourthTextInput = input }}
                 onEndEditing={(plate) => {this.validation('plate')}}
-                onSubmitEditing={() => { this.fifthTextInput.focus() }}
+                onSubmitEditing={Keyboard.dismiss}
                 />
                 <Animated.View style={[styles.hr, this.state.input.plate.validate && styles.validateInputText, this.state.input.plate.focus && {backgroundColor: focus[0].color}]}/>
                 {
@@ -223,41 +253,48 @@ class SignupScreen extends Component {
                 }
             </View>
             <View style={styles.halfSectionContainer}>
-              <View style={styles.halfSection}>
-                <Text style={styles.label}>Modello</Text>
-                <Picker
-                  selectedValue={this.state.brand}
-                  style={{ height: 50, width: 100 }}
-                  onValueChange={(itemValue, itemIndex) => this.setState({brand: itemValue})}>
-                  {this.state.brands.map((item, index) => {
-                    return(
-                      <Picker.Item key={index} label={item} value={item} />
-                    )
-                  })}
-                </Picker>
+              <View style={[styles.halfSection, {marginRight:'10%'}]}>
+                <Text style={styles.label}>Marca</Text>
+                <RNPickerSelect
+                    placeholder={{
+                        label: 'Seleziona la marca',
+                        value: null,
+                    }}
+                    items={this.state.brands}
+                    onValueChange={(value) => {this.setState({brand: value})}}
+                    onUpArrow={() => {this.inputRefs.picker.togglePicker()}}
+                    onDownArrow={() => {this.inputRefs.company.focus()}}
+                    style={{...pickerSelectStyles}}
+                    value={this.state.brand}
+                    hideIcon={true}
+                />
               </View>
               <View style={styles.halfSection}>
                 <Text style={styles.label}>Modello</Text>
-                <Picker
-                  selectedValue={this.state.model}
-                  style={{ height: 50, width: 100 }}
-                  onValueChange={(itemValue, itemIndex) => this.setState({model: itemValue})}>
-                  {this.state.cars.map((item, index) => {
-                    if (this.state.brand == item.brand) {
-                      return(
-                        <Picker.Item key={index} label={item.model} value={item.model} />
-                      )
-                    }
-                  })}
-                </Picker>
+                <RNPickerSelect
+                    placeholder={{
+                        label: 'Seleziona il modello',
+                        value: null,
+                    }}
+                    items={this.state.models[this.state.brand] || this.state.models.mercedes}
+                    onValueChange={(value) => {this.setState({model: value})}}
+                    onUpArrow={() => {this.inputRefs.picker.togglePicker()}}
+                    onDownArrow={() => {this.inputRefs.company.focus()}}
+                    style={{ ...pickerSelectStyles }}
+                    value={this.state.model}
+                    hideIcon={true}
+                    // ref={(el) => {this.inputRefs.picker = el;}}
+                />
               </View>
             </View>
 
           <View style={styles.buttons}>
+            <Animated.Text style={[styles.errorCar, {transform:[{translateY: translateError}], opacity: opacityError}]}>Inserire correttamente tutti i campi</Animated.Text>
             <CustomButton buttonStyle={styles.signupBtn} textStyle={styles.signupTextBtn} text="Avanti" onPress={() => this.registration()}/>
             <CustomButton buttonStyle={styles.loginBtn} textStyle={styles.loginTextBtn} text="Sei già Registrato? Login" onPress={() => this.props.navigation.navigate('LogIn')}/>
           </View>
       </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -281,7 +318,7 @@ const styles = StyleSheet.create({
     color: 'rgba(0,0,0,0.3)',
     fontFamily: FONT.AVENIR,
     marginTop: 1*Vh,
-    marginBottom: 5*Vh
+    marginBottom: 7*Vh
   },
   form:{
     width: '100%',
@@ -296,7 +333,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly'
   },
   halfSection:{
-    width: '40%',
+    width: '45%',
   },
   label:{
     fontSize: FONT_SIZE.S,
@@ -311,7 +348,8 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.M,
     color: COLOR.BLACK,
     fontFamily: FONT.AVENIR,
-    width: '100%'
+    width: '100%',
+    paddingBottom: 5
   },
   validateInputText:{
     backgroundColor: COLOR.GREEN,
@@ -350,8 +388,26 @@ const styles = StyleSheet.create({
   hr:{
     width: '100%',
     height: 1,
-    backgroundColor: 'rgba(18,18,18,0.2)'
+    backgroundColor: 'rgba(18,18,18,0.1)'
+  },
+  errorCar:{
+    fontSize: FONT_SIZE.S,
+    fontFamily: FONT.AVENIR,
+    color: COLOR.RED,
+    alignSelf: 'center',
+    marginBottom: 2*Vh
   }
 })
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: FONT_SIZE.DEFAULT,
+        fontFamily: FONT.AVENIR,
+        paddingVertical: 5,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(0,0,0,0.1)',
+        color: 'black',
+    },
+});
 
 export default SignupScreen

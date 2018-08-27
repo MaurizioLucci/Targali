@@ -8,7 +8,8 @@ import {
     Keyboard,
     Animated,
     Easing,
-    AsyncStorage
+    AsyncStorage,
+    TouchableWithoutFeedback
 } from 'react-native';
 import { PADDING, COLOR, FONT, FONT_SIZE, Vh, Vw } from '../../../styles/utilities'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -30,43 +31,11 @@ class SignupScreen extends Component {
         }
       },
       input: {
-        name:{
-          value: '',
-          focus:false,
-          validate: false,
-          error: 'Inserisci nome e cognome',
-          animation: new Animated.Value(0),
-          focusInput: new Animated.Value(0),
-        },
-        mail:{
-          value: '',
-          focus:false,
-          validate: false,
-          error: 'Mail non valida',
-          animation: new Animated.Value(0),
-          focusInput: new Animated.Value(0),
-        },
         phone:{
           value: '',
           focus:false,
           validate: false,
-          error: 'Numero non valido',
-          animation: new Animated.Value(0),
-          focusInput: new Animated.Value(0),
-        },
-        plate:{
-          value: '',
-          focus:false,
-          validate: false,
-          error: 'Targa non valida',
-          animation: new Animated.Value(0),
-          focusInput: new Animated.Value(0),
-        },
-        model:{
-          value: '',
-          focus:false,
-          validate: false,
-          error: 'Inserisci il modello',
+          error: 'Inserisci un numero valido',
           animation: new Animated.Value(0),
           focusInput: new Animated.Value(0),
         }
@@ -215,132 +184,38 @@ class SignupScreen extends Component {
     });
 
     return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-          <Text style={styles.title}>Registrazione3</Text>
-          <KeyboardAwareScrollView
-            style={styles.form}
-            scrollEnabled={true}
-            contentContainerStyle={{alignItems: 'flex-start', justifyContent: 'center'}}
-          >
+          <Text style={styles.title}>verifica il tuo account</Text>
+          <Text style={styles.subtitle}>Inserisci il tuo numero di cellulare per rendere il tuo account verificato</Text>
             <View style={styles.section}>
-              <Text style={styles.label}>Nome e cognome</Text>
               <TextInput
                 style={styles.inputText}
-                editable={true}
-                returnKeyType='next'
-                blurOnSubmit={false}
-                value={''}
-                onFocus={() => this.inputOnFocus('name')}
-                onChangeText={(name) => {this.handleState('name', name )}}
-                onEndEditing={(name) => {this.validation('name')}}
-                onSubmitEditing={() => {this.secondTextInput.focus()}}
-                />
-                <Animated.View style={[styles.hr, this.state.input.name.validate && styles.validateInputText, this.state.input.name.focus && {backgroundColor: focus[0].color}]}/>
-                {
-                  this.state.input.name.validate ?
-                    <Animated.Text style={[styles.feedbackGreenText, {opacity:interpolations[0].opacity, transform:[{translateY: interpolations[0].translateY}]}]}>✓</Animated.Text>
-                  :
-                    <Animated.Text style={[styles.feedbackRedText, {opacity:interpolations[0].opacity, transform:[{translateY: interpolations[0].translateY}]}]}>{this.state.input.name.error}</Animated.Text>
-                }
-            </View>
-            <View style={styles.section}>
-              <Text style={styles.label}>Indirizzo E-Mail</Text>
-              <TextInput
-                style={styles.inputText}
-                editable={true}
-                returnKeyType='next'
-                blurOnSubmit={false}
-                keyboardType='email-address'
-                autoCapitalize = 'none'
-                value={''}
-                onFocus={() => this.inputOnFocus('mail')}
-                onChangeText={(mail) => {this.handleState('mail', mail)}}
-                onEndEditing={(mail) => {this.validation('mail')}}
-                ref={(input) => { this.secondTextInput = input }}
-                onSubmitEditing={() => { this.thirdTextInput.focus() }}
-                />
-                <Animated.View style={[styles.hr, this.state.input.mail.validate && styles.validateInputText, this.state.input.mail.focus && {backgroundColor: focus[1].color}]}/>
-                {
-                  this.state.input.mail.validate ?
-                    <Animated.Text style={[styles.feedbackGreenText, {opacity:interpolations[1].opacity, transform:[{translateY: interpolations[1].translateY}]}]}>✓</Animated.Text>
-                  :
-                    <Animated.Text style={[styles.feedbackRedText, {opacity:interpolations[1].opacity, transform:[{translateY: interpolations[1].translateY}]}]}>{this.state.input.mail.error}</Animated.Text>
-                }
-            </View>
-            <View style={styles.section}>
-              <Text style={styles.label}>Numero Cell.</Text>
-              <TextInput
-                style={styles.inputText}
+                placeholder='Numero cellulare*'
                 editable={true}
                 returnKeyType='done'
-                blurOnSubmit={false}
                 keyboardType='numeric'
+                blurOnSubmit={false}
                 value={''}
                 onFocus={() => this.inputOnFocus('phone')}
-                onChangeText={(phone) => {this.handleState('phone', phone)}}
-                ref={(input) => { this.thirdTextInput = input }}
+                onChangeText={(phone) => {this.handleState('phone', phone )}}
                 onEndEditing={(phone) => {this.validation('phone')}}
-                onSubmitEditing={() => { this.fourthTextInput.focus() }}
+                onSubmitEditing={Keyboard.dismiss}
                 />
-                <Animated.View style={[styles.hr, this.state.input.phone.validate && styles.validateInputText, this.state.input.phone.focus && {backgroundColor: focus[2].color}]}/>
+                <Animated.View style={[styles.hr, this.state.input.phone.validate && styles.validateInputText, this.state.input.phone.focus && {backgroundColor: focus[0].color}]}/>
                 {
                   this.state.input.phone.validate ?
-                    <Animated.Text style={[styles.feedbackGreenText, {opacity:interpolations[2].opacity, transform:[{translateY: interpolations[2].translateY}]}]}>✓</Animated.Text>
+                    <Animated.Text style={[styles.feedbackGreenText, {opacity:interpolations[0].opacity, transform:[{translateY: interpolations[0].translateY}]}]}>✓</Animated.Text>
                   :
-                    <Animated.Text style={[styles.feedbackRedText, {opacity:interpolations[2].opacity, transform:[{translateY: interpolations[2].translateY}]}]}>{this.state.input.phone.error}</Animated.Text>
+                    <Animated.Text style={[styles.feedbackRedText, {opacity:interpolations[0].opacity, transform:[{translateY: interpolations[0].translateY}]}]}>{this.state.input.phone.error}</Animated.Text>
                 }
             </View>
-            <View style={styles.section}>
-              <Text style={styles.label}>Targa</Text>
-              <TextInput
-                style={styles.inputText}
-                editable={true}
-                returnKeyType='next'
-                blurOnSubmit={false}
-                autoCapitalize='characters'
-                value={''}
-                onFocus={() => this.inputOnFocus('plate')}
-                onChangeText={(plate) => {this.handleState('plate', plate)}}
-                ref={(input) => { this.fourthTextInput = input }}
-                onEndEditing={(plate) => {this.validation('plate')}}
-                onSubmitEditing={() => { this.fifthTextInput.focus() }}
-                />
-                <Animated.View style={[styles.hr, this.state.input.plate.validate && styles.validateInputText, this.state.input.plate.focus && {backgroundColor: focus[3].color}]}/>
-                {
-                  this.state.input.plate.validate ?
-                    <Animated.Text style={[styles.feedbackGreenText, {opacity:interpolations[3].opacity, transform:[{translateY: interpolations[3].translateY}]}]}>✓</Animated.Text>
-                  :
-                    <Animated.Text style={[styles.feedbackRedText, {opacity:interpolations[3].opacity, transform:[{translateY: interpolations[3].translateY}]}]}>{this.state.input.plate.error}</Animated.Text>
-                }
-            </View>
-            <View style={styles.section}>
-              <Text style={styles.label}>Modello</Text>
-              <TextInput
-                style={styles.inputText}
-                editable={true}
-                returnKeyType='done'
-                blurOnSubmit={false}
-                onSubmitEditing={Keyboard.dismiss}
-                value={''}
-                onFocus={() => this.inputOnFocus('model')}
-                onEndEditing={(model) => {this.validation('model')}}
-                onChangeText={(model) => {this.handleState('model', model)}}
-                ref={(input) => { this.fifthTextInput = input }}
-                />
-                <Animated.View style={[styles.hr, this.state.input.model.validate && styles.validateInputText, this.state.input.model.focus && {backgroundColor: focus[4].color}]}/>
-                {
-                  this.state.input.model.validate ?
-                    <Animated.Text style={[styles.feedbackGreenText, {opacity:interpolations[4].opacity, transform:[{translateY: interpolations[4].translateY}]}]}>✓</Animated.Text>
-                  :
-                    <Animated.Text style={[styles.feedbackRedText, {opacity:interpolations[4].opacity, transform:[{translateY: interpolations[4].translateY}]}]}>{this.state.input.model.error}</Animated.Text>
-                }
-            </View>
-          </KeyboardAwareScrollView>
           <View style={styles.buttons}>
             <CustomButton buttonStyle={styles.signupBtn} textStyle={styles.signupTextBtn} text="Invia Codice" onPress={() => this.registration()}/>
             <CustomButton buttonStyle={styles.loginBtn} textStyle={styles.loginTextBtn} text="Torna indietro" onPress={() => this.props.navigation.goBack()}/>
           </View>
       </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -356,9 +231,15 @@ const styles = StyleSheet.create({
   },
   title:{
     fontFamily: FONT.BEBAS,
-    color: COLOR.RED,
+    color: COLOR.GREEN,
     fontSize: FONT_SIZE.L,
-    paddingBottom: 5*Vh
+  },
+  subtitle:{
+    fontSize: FONT_SIZE.DEFAULT,
+    color: 'rgba(0,0,0,0.3)',
+    fontFamily: FONT.AVENIR,
+    marginTop: 1*Vh,
+    marginBottom: 7*Vh
   },
   form:{
     width: '100%',
@@ -381,7 +262,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: COLOR.BLACK,
     fontFamily: FONT.AVENIR,
-    width: '100%'
+    width: '100%',
+    paddingBottom: 5
   },
   validateInputText:{
     backgroundColor: COLOR.GREEN,
@@ -411,7 +293,7 @@ const styles = StyleSheet.create({
   },
   feedbackRedText:{
     position: 'absolute',
-    bottom: 0,
+    bottom: 5,
     right: 0,
     fontSize: FONT_SIZE.S,
     fontFamily: FONT.AVENIR,
@@ -420,7 +302,7 @@ const styles = StyleSheet.create({
   hr:{
     width: '100%',
     height: 1,
-    backgroundColor: 'rgba(18,18,18,0.2)'
+    backgroundColor: 'rgba(18,18,18,0.1)'
   }
 })
 
